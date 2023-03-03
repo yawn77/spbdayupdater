@@ -1,0 +1,41 @@
+# uses https://github.com/wangyoucao577/go-release-action/
+
+name: Publish
+
+on:
+  release:
+    types: [created]
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    name: Publish
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64]
+        exclude:
+          - goarch: arm64
+            goos: windows
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Set env
+      run: |
+        RELEASE_VERSION=${GITHUB_REF#refs/*/}
+        echo "RELEASE_VERSION=${RELEASE_VERSION#"v"}" >> $GITHUB_ENV
+    - name: Print release version
+      run: echo ${{ env.RELEASE_VERSION }}
+    - name: Publish
+      uses: wangyoucao577/go-release-action@v1.35
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        ldflags: -X main.version=${{ env.RELEASE_VERSION }}
+        project_path: "./cmd/spbdayupdater"
+        extra_files: LICENSE README.md
