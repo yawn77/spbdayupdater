@@ -126,9 +126,9 @@ func getSessionInformation(client *http.Client) (session, error) {
 }
 
 func getBirthday() (string, string, string) {
-	rand.Seed(time.Now().UnixNano())
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	year, month, day := time.Now().Date()
-	return fmt.Sprint(year - rand.Intn(120)), fmt.Sprint(int(month)), fmt.Sprint(day)
+	return fmt.Sprint(year - r.Intn(120)), fmt.Sprint(int(month)), fmt.Sprint(day)
 }
 
 func getValue(name string, body string) (string, error) {
