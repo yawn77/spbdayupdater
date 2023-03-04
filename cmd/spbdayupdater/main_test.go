@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -8,6 +9,10 @@ import (
 	"strings"
 	"testing"
 )
+
+// add for successful tests
+var Username = flag.String("username", "", "Username")
+var Password = flag.String("password", "", "User password")
 
 func TestPrintVersion(t *testing.T) {
 	version = "0.0.1"
