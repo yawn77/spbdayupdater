@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/yawn77/spcontrol"
+	"github.com/yawn77/sphelper"
 )
 
 // credentials for command-line tests
@@ -14,13 +14,13 @@ var username = flag.String("username", "", "Username")
 var password = flag.String("password", "", "User password")
 
 // get credentials either from env or from cmdline if env does not exists
-func getCredentials() spcontrol.Credentials {
-	cred, err := spcontrol.GetCredentials()
+func getCredentials() sphelper.Credentials {
+	cred, err := sphelper.GetCredentials()
 	if err != nil {
-		cred = spcontrol.Credentials{
+		cred = sphelper.Credentials{
 			Username:    *username,
 			Password:    *password,
-			PasswordMd5: spcontrol.GetMD5Hash(*password),
+			PasswordMd5: sphelper.GetMD5Hash(*password),
 		}
 	}
 	return cred
@@ -63,7 +63,7 @@ func TestUpdate(t *testing.T) {
 	// arrange
 	year, month, day := getRandomBirthday(false)
 	creds := getCredentials()
-	client, err := spcontrol.GetClient()
+	client, err := sphelper.GetClient()
 	if err != nil {
 		t.Fatalf("could not create client: %v", err)
 	}

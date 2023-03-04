@@ -10,7 +10,7 @@ import (
 	"github.com/go-co-op/gocron"
 	"github.com/gookit/slog"
 	"github.com/yawn77/spbdayupdater/pkg/bdayupdater"
-	"github.com/yawn77/spcontrol"
+	"github.com/yawn77/sphelper"
 )
 
 var version string
@@ -65,7 +65,7 @@ func subMain(conf *Config) int {
 	}
 	slog.Info("started SP Bday Updater")
 	// test if valid credentials are provided
-	creds, err := spcontrol.GetCredentials()
+	creds, err := sphelper.GetCredentials()
 	if err != nil {
 		slog.Error(err)
 		return 1

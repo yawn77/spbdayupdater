@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/gookit/slog"
-	"github.com/yawn77/spcontrol"
+	"github.com/yawn77/sphelper"
 )
 
 // URLs
@@ -62,7 +62,7 @@ func getValue(name string, body string) (string, error) {
 	return l[2], nil
 }
 
-func getCurrentValues(client spcontrol.Client) (values, error) {
+func getCurrentValues(client sphelper.Client) (values, error) {
 	body, err := client.Get(urlEdit)
 	if err != nil {
 		return values{}, err
@@ -101,7 +101,7 @@ func getCurrentValues(client spcontrol.Client) (values, error) {
 	}, nil
 }
 
-func editBirthday(year string, month string, day string, client spcontrol.Client) error {
+func editBirthday(year string, month string, day string, client sphelper.Client) error {
 	cur, err := getCurrentValues(client)
 	if err != nil {
 		return nil
@@ -127,13 +127,13 @@ func editBirthday(year string, month string, day string, client spcontrol.Client
 
 func Update(yearOnly bool) {
 	year, month, day := getRandomBirthday(yearOnly)
-	creds, err := spcontrol.GetCredentials()
+	creds, err := sphelper.GetCredentials()
 	if err != nil {
 		slog.Error(err)
 		return
 	}
 	slog.Infof("update birthday to %s-%s-%s for %s", month, day, year, creds.Username)
-	client, err := spcontrol.GetClient()
+	client, err := sphelper.GetClient()
 	if err != nil {
 		slog.Error(err)
 		return
