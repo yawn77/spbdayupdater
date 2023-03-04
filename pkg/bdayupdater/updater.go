@@ -125,8 +125,8 @@ func editBirthday(year string, month string, day string, client spcontrol.Client
 	return err
 }
 
-func Update() {
-	year, month, day := getRandomBirthday(true)
+func Update(yearOnly bool) {
+	year, month, day := getRandomBirthday(yearOnly)
 	creds, err := spcontrol.GetCredentials()
 	if err != nil {
 		slog.Error(err)
