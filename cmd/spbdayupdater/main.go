@@ -9,7 +9,8 @@ import (
 
 	"github.com/go-co-op/gocron"
 	"github.com/gookit/slog"
-	"github.com/yawn77/spbdayupdater/pkg/updater"
+	"github.com/yawn77/spbdayupdater/pkg/bdayupdater"
+	"github.com/yawn77/spcontrol"
 )
 
 var version string
@@ -47,14 +48,13 @@ func parseFlags(progname string, args []string) (config *Config, output string, 
 
 func runUpdateJob() {
 	s := gocron.NewScheduler(time.Local)
-
-	_, err := s.Every(1).Day().At("00:00").Do(func() {
-		updater.Update()
+	// _, err := s.Every(1).Day().At("00:00").Do(func() {
+	_, err := s.Every(5).Second().Do(func() {
+		bdayupdater.Update()
 	})
 	if err != nil {
 		slog.Error(err)
 	}
-
 	s.StartBlocking()
 }
 
@@ -63,33 +63,29 @@ func subMain(conf *Config) int {
 		fmt.Println(version)
 		return 0
 	}
-
-	_, err := updater.GetCredentials()
+	slog.Info("started SP Bday Updater")
+	// test if valid credentials are provided
+	creds, err := spcontrol.GetCredentials()
 	if err != nil {
 		slog.Error(err)
 		return 1
 	}
-
-	slog.Info("started SP Bday Updater")
+	slog.Infof("user: %s", creds.Username)
 	runUpdateJob()
-
 	return 0
 }
 
 func main() {
 	conf, output, err := parseFlags(os.Args[0], os.Args[1:])
-
 	if err == flag.ErrHelp {
 		slog.Error(output)
 		os.Exit(1)
 	}
-
 	if err != nil {
 		slog.Error(err)
 		slog.Error(output)
 		os.Exit(1)
 	}
-
 	exitCode := subMain(conf)
 	os.Exit(exitCode)
 }
