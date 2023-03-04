@@ -48,9 +48,8 @@ func parseFlags(progname string, args []string) (config *Config, output string, 
 
 func runUpdateJob() {
 	s := gocron.NewScheduler(time.Local)
-	// _, err := s.Every(1).Day().At("00:00").Do(func() {
-	_, err := s.Every(5).Second().Do(func() {
-		bdayupdater.Update(false)
+	_, err := s.Every(1).Day().At("00:00").Do(func() {
+		bdayupdater.Update(true)
 	})
 	if err != nil {
 		slog.Error(err)
