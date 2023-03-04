@@ -50,7 +50,7 @@ func runUpdateJob() {
 	s := gocron.NewScheduler(time.Local)
 	// _, err := s.Every(1).Day().At("00:00").Do(func() {
 	_, err := s.Every(5).Second().Do(func() {
-		bdayupdater.Update(true)
+		bdayupdater.Update(false)
 	})
 	if err != nil {
 		slog.Error(err)
